@@ -12,7 +12,7 @@ command. The instance will be inserted after current line.
 Use [Vim-Plug](https://github.com/junegunn/vim-plug) or any other plugin manager to install it.
 
 ```vim
-Plug 'damofthemoon/vim-svtb'
+Plug 'dpretet/vim-svtb'
 ```
 
 vim-svtb is written in python. Please be sure to use Vim/NVim with python support.

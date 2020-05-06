@@ -28,7 +28,7 @@ Installation                                                      *svtb-installa
 
 Use Vim-Plug or any other plugin manager to install it:
 
-    Plug 'damofthemoon/vim-svtb'
+    Plug 'dpretet/vim-svtb'
 
 
 vim-svtb is written in python. Please be sure to use Vim with python support.

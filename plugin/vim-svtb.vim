@@ -1,8 +1,8 @@
 "--------------------------------------------------------
 "
-" Plugin:      https://github.com/damofthemoon/vim-svtb
+" Plugin:      https://github.com/dpretet/vim-svtb
 " Description: A plugin to work with Verilog & SystemVerilog
-" Maintainer:  Damien Pretet https://github.com/damofthemoon
+" Maintainer:  Damien Pretet https://github.com/dpretet
 
 " Created with the help of Tim's Exploration Journal
 " http://candidtim.github.io/vim/2017/08/11/write-vim-plugin-in-python.html
