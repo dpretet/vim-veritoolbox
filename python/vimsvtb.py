@@ -10,64 +10,76 @@ def get_module_info(verilog):
     """ Return a dict containing all the
     module information """
 
-    into_comment = "No"
-    module_found = "No"
-    parameter_found = "No"
-    io_found = "No"
+    # List of flags activated during parsing steps.
+    intoComment = "No"
+    inlineComment = "Yes"
+    moduleFound = "No"
+    parameterFound = "No"
+    ioFound = "No"
 
     instance = {"name": "", "io": [], "parameter": []}
 
     for line in verilog:
 
+        # Remove space at beginning and end of line
         line = line.strip()
 
-        # Detect comment block and avoid to parse them
-        if line[0:1] == "/*":
-            into_comment = "Yes"
+        # Detect comment block in header
+        # and avoid to parse them
+        if line[0:2] == "/*":
+            intoComment = "Yes"
+            inlineComment = "No"
+        elif line[0:2] == "//":
+            intoComment = "Yes"
+            inlineComment = "Yes"
+        elif line[0:2] == "*/" or line[-2:] == "*/":
+            intoComment = "No"
+            inlineComment = "No"
 
-        elif line[0:1] == "*/" or line[-2:] == "*/":
-            into_comment = "No"
-
-        if into_comment == "Yes":
+        if intoComment == "Yes":
+            if inlineComment == "Yes":
+                intoComment = "No"
             continue
 
         # Search for the module name
-        if module_found == "No":
-
+        # if `module` found, split line with " "
+        # and get the last part, the name.
+        # Expect `module module_name`alone on the line
+        if moduleFound == "No":
             if "module" in line:
-
-                module_found = "Yes"
+                moduleFound = "Yes"
                 info = line.split(" ")
                 instance["name"] = info[1]
-
                 if instance["name"][-1] == ";":
                     instance["name"] = instance["name"][:-1]
 
         # Search for the parameter if present
-        if parameter_found == "No":
-
+        # search a line with `parameter`, remove comment,
+        # replace comma with semicolon and store the line,
+        # ready to be written as a parameter declaration in
+        # testsuite file
+        if parameterFound == "No":
             if line[0:9] == "parameter":
-
                 _line = line.split("//")[0].strip()
                 _line = _line.replace("\t", " ")
                 _line = _line.replace(",", ";")
-
                 if _line[-1] != ";":
                     _line = _line + ";"
-
                 instance["parameter"].append(_line)
 
         # Search for the input and output
-        if io_found == "No":
+        # Search for input or ouput, change comma
+        # to semicolon, signed|wire to reg and
+        # remove IO mode. Ready to be written
+        # into testsuite file.
+        if ioFound == "No":
 
             if line[0:5] == "input":
-
                 _line = line.split("//")[0].strip()
-                _line = _line.replace("signed", "wire")
-                _line = _line.replace("reg", "wire")
+                _line = _line.replace("signed", "reg")
+                _line = _line.replace("wire", "reg ")
                 _line = _line.replace(",", ";")
                 _line = _line.replace("input", "")
-
                 instance["io"].append(_line.strip())
 
             if line[0:6] == "output":
@@ -76,17 +88,15 @@ def get_module_info(verilog):
                 _line = _line.replace(",", ";")
                 _line = _line.replace("signed", "wire")
                 _line = _line.replace("output", "")
-
                 if _line[-1] != ";":
                     _line = _line + ";"
-
                 instance["io"].append(_line.strip())
 
     return instance
 
 
 def create_instance(instance):
-    """ Parse `instance` dictionnary and create the
+    """ Parse instance dictionary and create the
     instance to drop in the buffer """
 
     _text = "\n"
