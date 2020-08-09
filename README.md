@@ -1,4 +1,4 @@
-# vim-svtb
+# vim-veritoolbox
 
 Vim plugin to work easier with Verilog and systemVerilog. For the moment,
 the plugin only add instance of a module.
@@ -9,16 +9,18 @@ command. The instance will be inserted after current line.
 
 # Installation
 
-Use [Vim-Plug](https://github.com/junegunn/vim-plug) or any other plugin manager to install it.
+Use [Vim-Plug](https://github.com/junegunn/vim-plug) or any other plugin
+manager to install it.
 
 ```vim
-Plug 'dpretet/vim-svtb'
+Plug 'dpretet/vim-veritoolbox'
 ```
 
-vim-svtb is written in python. Please be sure to use Vim/NVim with python support.
+vim-svtb is written in python. Please be sure to use Vim/NVim with python
+support.
 
 
 # License
 
-This plugin is under MIT license. Do whatever you want with it, and don't hesitate to fork it and
-contribute!
+This plugin is under MIT license. Do whatever you want with it, and don't
+hesitate to fork it and contribute!

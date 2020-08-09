@@ -4,6 +4,7 @@
 """ Vim Plugin to manipulate systemVerilog sources """
 
 import vim
+from verilog_parser import VerilogExtractor
 
 
 def get_module_info(verilog):
@@ -101,7 +102,7 @@ def create_instance(instance):
 
     _text = "\n"
 
-    # Print parameter declarationif present
+    # Print parameter declaration if present
     if instance["parameter"]:
         for param in instance["parameter"]:
             _text += """    """ + param + "\n"
@@ -137,8 +138,8 @@ def create_instance(instance):
             _name = _param[-3]
 
             _text += "    ." + _name + \
-                " " * (maxlen - len(_name)) + \
-                " (" + _name + ")"
+                     " " * (maxlen - len(_name)) + \
+                     " (" + _name + ")"
 
             if idx == len(instance["parameter"]) - 1:
                 _text += "\n"
@@ -167,8 +168,8 @@ def create_instance(instance):
             _name = _io[-1][:-1]
 
             _text += "    ." + _name + \
-                " " * (maxlen - len(_name)) + \
-                " (" + _name + " " * (maxlen - len(_name)) + ")"
+                     " " * (maxlen - len(_name)) + \
+                     " (" + _name + " " * (maxlen - len(_name)) + ")"
 
             if idx == len(instance["io"]) - 1:
                 _text += "\n"
@@ -187,14 +188,20 @@ def insert_sv_instance():
 
     # Get the " buffer content defined in upper vimscript
     buf = vim.eval("buf")
-    buf = buf.split("\n")
+    bufsplit = buf.split("\n")
 
     (row, _) = vim.current.window.cursor
 
     # Extract the module information
-    info = get_module_info(buf)
+    info = get_module_info(bufsplit)
     # Create the instance from previous information
     instance = create_instance(info)
+
+    parser = VerilogExtractor()
+    objs = parser.extract_objects_from_source(buf)
+
+    print(instance)
+    print(objs)
 
     # Split new content on newline
     # Vim doesn't allow \n

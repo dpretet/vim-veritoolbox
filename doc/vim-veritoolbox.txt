@@ -1,0 +1,41 @@
+*vim-veritoolbox.txt*      Verilog toolbox
+*veritoolbox*
+
+=====================================================================
+CONTENTS                                       *veritoolbox-contents*
+
+Overview                                       |veritoolbox-overview|
+
+Installation                               |veritoolbox-installation|
+
+Changelog                                     |veritoolbox-changelog|
+
+
+=====================================================================================
+Overview                                                       *veritoolbox-overview*
+
+|vim-veritoolbox| is a plugin to work easier with Verilog and systemVerilog.
+For the moment, the plugin only add instance of a module.
+
+To use it, go to a module to instanciate and copy the lines specifying the
+module name, the parameters and the input/output. Then call `InsertSVInstance`
+command. The instance will be inserted after current line.
+
+
+=====================================================================================
+Installation                                               *veritoolbox-installation*
+
+
+Use Vim-Plug or any other plugin manager to install it:
+
+    Plug 'dpretet/vim-veritoolbox'
+
+
+vim-veritoolbox is written in python. Please be sure to use Vim with python support.
+
+
+=================================================================================
+Changelog                                                 *veritoolbox-changelog*
+
+
+07/06/2019 - Initial release

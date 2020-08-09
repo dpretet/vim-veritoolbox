@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// Copyright 2019 Damien Pretet
+// Copyright 2020 Damien Pretet
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 `timescale 1 ns / 1 ps
 `default_nettype none
+
 
 module Adder
 
