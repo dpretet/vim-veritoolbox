@@ -53,43 +53,35 @@ def get_module_info(verilog):
                 if instance["name"][-1] == ";":
                     instance["name"] = instance["name"][:-1]
 
-        # Search for the parameter if present
-        # search a line with `parameter`, remove comment,
-        # replace comma with semicolon and store the line,
-        # ready to be written as a parameter declaration in
+        # Search for the parameter if present search a line with `parameter`,
+        # remove comment at the end of line, replace comma with semicolon and
+        # store the line, ready to be written as a parameter declaration in
         # testsuite file
         if parameterFound == "No":
             if line[0:9] == "parameter":
                 _line = line.split("//")[0].strip()
                 _line = _line.replace("\t", " ")
-                _line = _line.replace(",", ";")
+                _line = _line.replace(",", "")
                 if _line[-1] != ";":
                     _line = _line + ";"
                 instance["parameter"].append(_line)
 
-        # Search for the input and output
-        # Search for input or ouput, change comma
-        # to semicolon, signed|wire to reg and
-        # remove IO mode. Ready to be written
-        # into testsuite file.
+        # Search for input or ouput, change comma to semicolon, signed|wire to
+        # reg and remove IO mode. Remove comment at the end of line
+        # Ready to be written into testsuitefile.
         if ioFound == "No":
-
-            if line[0:5] == "input":
+            if line[0:5] == "input" or line[0:6] == "output":
                 _line = line.split("//")[0].strip()
-                _line = _line.replace("signed", "reg")
-                _line = _line.replace("wire", "reg ")
-                _line = _line.replace(",", ";")
-                _line = _line.replace("input", "")
-                instance["io"].append(_line.strip())
-
-            if line[0:6] == "output":
-
-                _line = line.split("//")[0].strip()
-                _line = _line.replace(",", ";")
-                _line = _line.replace("signed", "wire")
+                if line[0:10] == "input var ":
+                    _line = _line.replace("input var", "")
+                else:
+                    _line = _line.replace("input", "")
                 _line = _line.replace("output", "")
-                if _line[-1] != ";":
-                    _line = _line + ";"
+                _line = _line.replace("signed", "logic")
+                _line = _line.replace("wire", "logic")
+                _line = _line.replace("reg", "logic")
+                _line = _line.replace(",", "")
+                _line = _line + ";"
                 instance["io"].append(_line.strip())
 
     return instance
@@ -133,8 +125,13 @@ def create_instance(instance):
         # Then pass to declare the param in the instance
         for idx, param in enumerate(instance["parameter"]):
 
-            _param = param.split(" ")
-            _name = _param[-3]
+            # get left and right side around the equal sign
+            _param = param.split("=")
+            # split over space of the let side ('parameter param_name')
+            _param = _param[-2].split(" ")
+            # remove empty element in the list
+            _param = list(filter(None, _param))
+            _name = _param[-1]
 
             _text += "    ." + _name + \
                 " " * (maxlen - len(_name)) + \
