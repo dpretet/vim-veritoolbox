@@ -4,7 +4,7 @@
 """ Vim Plugin to manipulate systemVerilog sources """
 
 import vim
-
+import re
 
 def get_module_info(verilog):
     """ Return a dict containing all the
@@ -68,19 +68,19 @@ def get_module_info(verilog):
 
         # Search for input or ouput, change comma to semicolon, signed|wire to
         # reg and remove IO mode. Remove comment at the end of line
-        # Ready to be written into testsuitefile.
+        # Ready to be written into testsuite file.
         if ioFound == "No":
             if line[0:5] == "input" or line[0:6] == "output":
                 _line = line.split("//")[0].strip()
                 if line[0:10] == "input var ":
-                    _line = _line.replace("input var", "")
+                    _line = re.sub("input var", "", _line)
                 else:
-                    _line = _line.replace("input", "")
-                _line = _line.replace("output", "")
-                _line = _line.replace("signed", "logic")
-                _line = _line.replace("wire", "logic")
-                _line = _line.replace("reg", "logic")
-                _line = _line.replace(",", "")
+                    _line = re.sub("input", "", _line)
+                _line = re.sub("output", "", _line)
+                _line = re.sub("signed", "logic", _line)
+                _line = re.sub("wire", "logic", _line)
+                _line = re.sub("\sreg\s", "logic", _line)
+                _line = re.sub(",", "", _line)
                 _line = _line + ";"
                 instance["io"].append(_line.strip())
 
