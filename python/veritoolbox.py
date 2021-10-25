@@ -165,7 +165,7 @@ def create_instance(instance):
 
             _text += "    ." + _name + \
                 " " * (maxlen - len(_name)) + \
-                " (" + _name + " " * (maxlen - len(_name)) + ")"
+                " (" + _name + ")"
 
             if idx == len(instance["io"]) - 1:
                 _text += "\n"
