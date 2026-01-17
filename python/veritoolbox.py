@@ -76,10 +76,10 @@ def get_module_info(verilog):
                     _line = re.sub("input var", "", _line)
                 else:
                     _line = re.sub("input", "", _line)
-                _line = re.sub("output", "", _line)
-                _line = re.sub("signed", "logic", _line)
-                _line = re.sub("wire", "logic", _line)
-                _line = re.sub("\sreg\s", "logic", _line)
+                _line = re.sub(r"\soutput\s", "", _line)
+                _line = re.sub(r"\ssigned\s", "logic", _line)
+                _line = re.sub(r"\swire\s", "logic", _line)
+                _line = re.sub(r"\sreg\s", "logic", _line)
                 _line = re.sub(",", "", _line)
                 _line = _line + ";"
                 instance["io"].append(_line.strip())
